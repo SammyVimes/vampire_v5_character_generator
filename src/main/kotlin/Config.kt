@@ -32,3 +32,15 @@ fun loadPlayerCharacterTypes(): Map<String, PlayerCharacterType> {
     val characterTypeText = PlayerCharacterType::class.java.getResource("player_character_types.yaml").readText()
     return configMapper.readValue(characterTypeText)
 }
+
+data class MortalCharacterType(
+    val attributes: PointsByLevel,
+    val skills: PointsByLevel,
+    val advantages: Int,
+    val flaws: Int
+)
+
+fun loadMortalCharacterTypes(): Map<String, MortalCharacterType> {
+    val characterTypeText = PlayerCharacterType::class.java.getResource("mortal_character_types.yaml").readText()
+    return configMapper.readValue(characterTypeText)
+}

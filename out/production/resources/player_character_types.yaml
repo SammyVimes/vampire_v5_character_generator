@@ -1,14 +1,8 @@
-ThinBloods:
+Childer:  # Thinbloods
   bloodPotency: 0
   humanity: 7
   experience: 0
-  generations: [16]
-
-Childer:
-  bloodPotency: 1
-  humanity: 7
-  experience: 0
-  generations: [14, 15]
+  generations: [14, 15, 16]
 
 Neonate:
   bloodPotency: 1
