@@ -12,6 +12,10 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.9.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0")
 }
 
 tasks.withType<KotlinCompile> {
