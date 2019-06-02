@@ -29,8 +29,13 @@ class CharacterGenerator {
     }
 
     fun generateSkills(pointsByLevel: PointsByLevel): Skills {
-        // TODO: generate actual skill values
-        return Skills(mapOf(), mapOf(), mapOf())
+        val pointList = pointsByLevelToPointList(pointsByLevel).fillWith(0, totalSkillCount).shuffled()
+
+        val physical = physicalSkillsFromList(pointList.subList(0, 7))
+        val social = socialSkillsFromList(pointList.subList(8, 15))
+        val mental = mentalSkillsFromList(pointList.subList(16, 23))
+
+        return Skills(physical, social, mental)
     }
 
     fun generateDisciplinePowers(levels: List<Int>): List<DisciplinePower> {
