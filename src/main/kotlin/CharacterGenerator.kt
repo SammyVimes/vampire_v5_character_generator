@@ -21,6 +21,11 @@ class CharacterGenerator {
         val skills =
             generateSkills(defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistributionOptions.random()))
         val disciplines = generateDisciplinePowers(defaultPointsToSpend.disciplineLevels)
+
+        val health = 3 + attributes.physical.getValue(PhysicalAttribute.STAMINA) // + fortitude discipline bonus
+
+        // TODO: fill with actual values
+        return Character(attributes, skills, listOf(), health, -1, -1, -1, mapOf())
     }
 
     fun generateName(): Pair<String, String> {

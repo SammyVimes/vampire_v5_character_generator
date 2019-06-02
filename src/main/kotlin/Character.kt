@@ -1,7 +1,9 @@
 data class Character(
     val attributes: Attributes,
+    val skills: Skills,
+    val disciplines: List<DisciplinePower>,
 
-    var health: Int,
+    var maxHealth: Int,
     var willpower: Int,
     var humanity: Int,
     var bloodPotency: Int,
