@@ -7,15 +7,30 @@ class CharacterGenerator {
     private val names = loadNames()
 
     fun generateMortal() {
-        val gender = listOf("male", "female").random()
-        val country = "Germany"
-
-        val firstName = names.getValue(country).getByGender(gender).random()
-        val lastName = names.getValue(country).surnames.random()
+        val (firstName, lastName) = generateName()
 
         val attributes = generateAttributes(defaultPointsToSpend.attributes)
         val skills = generateSkills(defaultPointsToSpend.skillsByLevelOptions.getValue("balanced"))
         val disciplines = generateDisciplinePowers(defaultPointsToSpend.disciplineLevels)
+    }
+
+    fun generateCharacter(): Character {
+        val (firstName, lastName) = generateName()
+
+        val attributes = generateAttributes(defaultPointsToSpend.attributes)
+        val skills =
+            generateSkills(defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistributionOptions.random()))
+        val disciplines = generateDisciplinePowers(defaultPointsToSpend.disciplineLevels)
+    }
+
+    fun generateName(): Pair<String, String> {
+        val gender = listOf("male", "female").random()
+        val country = validNameCountries.random()
+
+        val firstName = names.getValue(country).getByGender(gender).random()
+        val lastName = names.getValue(country).surnames.random()
+
+        return Pair(firstName, lastName)
     }
 
     fun generateAttributes(pointsByLevel: PointsByLevel): Attributes {

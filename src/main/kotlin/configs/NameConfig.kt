@@ -16,6 +16,7 @@ data class Names(
     }
 }
 
+val validNameCountries = listOf("Germany")
 
 fun loadNames(): Map<Country, Names> {
     val namesText = Names::class.java.getResource("../names.yaml").readText()

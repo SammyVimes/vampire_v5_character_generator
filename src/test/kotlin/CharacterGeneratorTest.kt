@@ -8,9 +8,12 @@ internal class CharacterGeneratorTest {
         val characterGenerator = CharacterGenerator()
         val defaultPointsToSpend = loadDefaultPointsToSpend()
 
-        val skills = characterGenerator.generateSkills(defaultPointsToSpend.skillsByLevelOptions.getValue("balanced"))
+        for (skillDistribution in skillDistributionOptions) {
+            val skills =
+                characterGenerator.generateSkills(defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistribution))
 
-        // TODO: assert sanity for skill distribution
+            // TODO: assert sanity for skill distribution
+        }
     }
 
     // TODO: similar tests for attributes and disciplines
