@@ -19,8 +19,13 @@ class CharacterGenerator {
     }
 
     fun generateAttributes(pointsByLevel: PointsByLevel): Attributes {
-        // TODO: generate actual attribute values
-        return Attributes(mapOf(), mapOf(), mapOf(), 0, 0, mapOf())
+        val pointList = pointsByLevelToPointList(pointsByLevel).fillWith(0, totalAttributeCount).shuffled()
+
+        val physical = physicalAttributesFromList(pointList.subList(0, 2))
+        val social = socialAttributesFromList(pointList.subList(3, 5))
+        val mental = mentalAttributesFromList(pointList.subList(6, 8))
+
+        return Attributes(physical, social, mental)
     }
 
     fun generateSkills(pointsByLevel: PointsByLevel): Skills {
@@ -32,4 +37,7 @@ class CharacterGenerator {
         // TODO: generate actual discipline values
         return listOf()
     }
+
+    fun pointsByLevelToPointList(pointsByLevel: PointsByLevel) =
+        pointsByLevel.flatMap { (points, level) -> (0..level).map { points } }
 }
