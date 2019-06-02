@@ -1,23 +1,8 @@
+package configs
+
 import org.junit.jupiter.api.Test
 
-internal class ConfigTest {
-    @Test
-    fun defaultPointsAreSane() {
-        val defaultPointsToSpend = loadDefaultPointsToSpend()
-
-        with(defaultPointsToSpend) {
-            assert(attributes.all { it.key in 1..5 })
-            assert(attributes.map { it.value }.sum() == 9)
-
-            assert(skillsByLevelOptions.all { it.value.all { skillsByLevel -> skillsByLevel.key in 1..5 } })
-            assert(skillsByLevelOptions.all { it.value.map { skillsByLevel -> skillsByLevel.value }.sum() <= 24 })
-
-            assert(disciplineLevels.all { it > 0 })
-            assert(advantages >= 0)
-            assert(flaws >= 0)
-        }
-    }
-
+internal class CharacterTypeConfigKtTest {
     @Test
     fun playerCharacterTypesAreSane() {
         fun checkSanity(playerCharacterType: PlayerCharacterType) {
@@ -42,6 +27,9 @@ internal class ConfigTest {
 
                 assert(skills.all { it.key in 1..5 })
                 assert(skills.map { it.value }.sum() <= 24)
+
+                assert(advantages >= 0)
+                assert(flaws >= 0)
             }
         }
 
