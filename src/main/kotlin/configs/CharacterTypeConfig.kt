@@ -10,6 +10,8 @@ data class PlayerCharacterType(
     val generations: List<Int>
 )
 
+val validPlayerCharacterTypes = listOf("Childer", "Neonate", "Ancilla")
+
 fun loadPlayerCharacterTypes(): Map<String, PlayerCharacterType> {
     val characterTypeText = PlayerCharacterType::class.java.getResource("../player_character_types.yaml").readText()
     return configMapper.readValue(characterTypeText)
