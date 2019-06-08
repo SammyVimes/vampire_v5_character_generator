@@ -1,22 +1,27 @@
 package configs
 
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 internal class PointsToSpendConfigKtTest {
+    private lateinit var defaultPointsToSpend: DefaultPointsToSpend
+
+    @BeforeEach
+    fun loadPoints() {
+        defaultPointsToSpend = loadDefaultPointsToSpend()
+    }
+
     @Test
     fun defaultAttributePointsAreSane() {
-        val defaultPointsToSpend = loadDefaultPointsToSpend()
-
         with(defaultPointsToSpend) {
             assert(attributes.all { it.key in 1..5 })
-            assert(attributes.map { it.value }.sum() == 9)
+            Assertions.assertEquals(9, attributes.map { it.value }.sum())
         }
     }
 
     @Test
     fun defaultSkillPointsAreSane() {
-        val defaultPointsToSpend = loadDefaultPointsToSpend()
-
         with(defaultPointsToSpend) {
             assert(skillsByLevelOptions.all { it.value.all { skillsByLevel -> skillsByLevel.key in 1..5 } })
             assert(skillsByLevelOptions.all { it.value.map { skillsByLevel -> skillsByLevel.value }.sum() <= 24 })
@@ -25,8 +30,6 @@ internal class PointsToSpendConfigKtTest {
 
     @Test
     fun defaultDisciplinePointsAreSane() {
-        val defaultPointsToSpend = loadDefaultPointsToSpend()
-
         with(defaultPointsToSpend) {
             assert(disciplineLevels.all { it in 1..5 })
         }

@@ -1,5 +1,6 @@
 package configs
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class CharacterTypeConfigKtTest {
@@ -23,7 +24,7 @@ internal class CharacterTypeConfigKtTest {
         fun checkSanity(mortalCharacterType: MortalCharacterType) {
             with(mortalCharacterType) {
                 assert(attributes.all { it.key in 1..5 })
-                assert(attributes.map { it.value }.sum() == 9)
+                assertEquals(9, attributes.map { it.value }.sum())
 
                 assert(skills.all { it.key in 1..5 })
                 assert(skills.map { it.value }.sum() <= 24)

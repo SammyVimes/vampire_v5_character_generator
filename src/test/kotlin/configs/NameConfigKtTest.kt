@@ -1,5 +1,6 @@
 package configs
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class NameConfigKtTest {
@@ -7,6 +8,6 @@ internal class NameConfigKtTest {
     fun namesAreSane() {
         // Don't make assumptions about names
         val names = loadNames()
-        assert(names.filterKeys { it in validNameCountries } == names)
+        assertEquals(names.filterKeys { it in validNameCountries }, names)
     }
 }
