@@ -6,7 +6,9 @@ data class Discipline(
     val name: String,
     var level: Int,
     val powersByLevel: Map<Int, List<DisciplinePower>>
-)
+) {
+    fun getPowersUntilLevel(level: Int) = powersByLevel.filterKeys { it <= level }
+}
 
 enum class DisciplineName {
     ANIMALISM,
@@ -31,7 +33,7 @@ data class DisciplinePower(
     val duration: String
 )
 
-fun loadDisciplines(): List<Discipline> {
+fun loadFullDisciplines(): List<Discipline> {
     val disciplinesText = Discipline::class.java.getResource("../disciplines.yaml").readText()
     return configMapper.readValue(disciplinesText)
 }

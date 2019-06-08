@@ -2,7 +2,7 @@ import configs.*
 
 class CharacterGenerator {
     private val defaultPointsToSpend = loadDefaultPointsToSpend()
-    private val disciplines = loadDisciplines()
+    private val fullDisciplines = loadFullDisciplines()
     private val playerCharacterTypes = loadPlayerCharacterTypes()
     private val mortalCharacterTypes = loadMortalCharacterTypes()
     private val names = loadNames()
@@ -54,9 +54,9 @@ class CharacterGenerator {
     fun generateAttributes(pointsByLevel: PointsByLevel): Attributes {
         val pointList = pointsByLevelToPointList(pointsByLevel).fillWith(0, totalAttributeCount).shuffled()
 
-        val physical = physicalAttributesFromList(pointList.subList(0, 2))
-        val social = socialAttributesFromList(pointList.subList(3, 5))
-        val mental = mentalAttributesFromList(pointList.subList(6, 8))
+        val physical = physicalAttributesFromList(pointList.subList(0, 3))
+        val social = socialAttributesFromList(pointList.subList(3, 6))
+        val mental = mentalAttributesFromList(pointList.subList(6, 9))
 
         return Attributes(physical, social, mental)
     }
@@ -73,19 +73,20 @@ class CharacterGenerator {
 
     fun generateDisciplines(levels: List<Int>): List<Discipline> {
         val pickedDisciplines = mutableListOf<Discipline>()
-        for (level in 1..levels.size) {
-            pickedDisciplines.add((disciplines - pickedDisciplines).random())
-        }
-        pickedDisciplines.shuffle()
-
         for (level in levels) {
+            val pickedFullDiscipline = (fullDisciplines - pickedDisciplines).random()
+            val pickedDiscipline = Discipline(
+                pickedFullDiscipline.name,
+                level,
+                pickedFullDiscipline.getPowersUntilLevel(level).map { it.key to listOf(it.value.random()) }.toMap()
+            )
 
+            pickedDisciplines.add(pickedDiscipline)
         }
 
-
-        return listOf()
+        return pickedDisciplines
     }
 
     fun pointsByLevelToPointList(pointsByLevel: PointsByLevel) =
-        pointsByLevel.flatMap { (points, level) -> (0..level).map { points } }
+        pointsByLevel.flatMap { (points, level) -> (1..level).map { points } }
 }
