@@ -12,6 +12,12 @@ data class Skills(
 const val totalSkillCount = 27
 val skillDistributionOptions = listOf("jackOfAllTrades", "balanced", "specialist")
 
+enum class SkillType {
+    PHYSICAL,
+    SOCIAL,
+    MENTAL
+}
+
 enum class PhysicalSkill {
     ATHLETICS,
     BRAWL,

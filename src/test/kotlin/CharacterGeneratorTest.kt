@@ -61,7 +61,7 @@ internal class CharacterGeneratorTest {
     }
 
     @Test
-    fun testGenerateMentallPrioritizedAttributes() {
+    fun testGenerateMentalPrioritizedAttributes() {
         val attributes = characterGenerator.generateAttributes(defaultPointsToSpend.attributes, AttributeType.MENTAL)
 
         attributes.mental.values.forEach {
@@ -83,13 +83,59 @@ internal class CharacterGeneratorTest {
             skills.social.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
             skills.mental.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
 
-            val physicalSum = skills.physical.values.sum()
-            val socialSum = skills.social.values.sum()
-            val mentalSum = skills.mental.values.sum()
-
-            val skillSum = physicalSum + socialSum + mentalSum
             val availableSkillPointSum = availablePointsByLevel.map { it.key * it.value }.sum()
-            assertEquals(availableSkillPointSum, skillSum)
+            assertSkillSumEqualsAvailablePointsSum(skills, availableSkillPointSum)
+        }
+    }
+
+    @Test
+    fun testGeneratePhysicalPrioritizedSkills() {
+        for (skillDistribution in skillDistributionOptions) {
+            val availablePointsByLevel = defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistribution)
+            val skills = characterGenerator.generateSkills(availablePointsByLevel, SkillType.PHYSICAL)
+
+            skills.physical.values.forEach {
+                assertTrue(it in 0..5, lvlMsg(it, 0..5))
+                assertTrue(skills.mental.values.all { mental -> mental <= it }, skills.toString())
+                assertTrue(skills.social.values.all { social -> social <= it }, skills.toString())
+            }
+
+            val availableSkillPointSum = availablePointsByLevel.map { it.key * it.value }.sum()
+            assertSkillSumEqualsAvailablePointsSum(skills, availableSkillPointSum)
+        }
+    }
+
+    @Test
+    fun testGenerateSocialPrioritizedSkills() {
+        for (skillDistribution in skillDistributionOptions) {
+            val availablePointsByLevel = defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistribution)
+            val skills = characterGenerator.generateSkills(availablePointsByLevel, SkillType.SOCIAL)
+
+            skills.social.values.forEach {
+                assertTrue(it in 0..5, lvlMsg(it, 0..5))
+                assertTrue(skills.physical.values.all { physical -> physical <= it }, skills.toString())
+                assertTrue(skills.mental.values.all { mental -> mental <= it }, skills.toString())
+            }
+
+            val availableSkillPointSum = availablePointsByLevel.map { it.key * it.value }.sum()
+            assertSkillSumEqualsAvailablePointsSum(skills, availableSkillPointSum)
+        }
+    }
+
+    @Test
+    fun testGenerateMentalPrioritizedSkills() {
+        for (skillDistribution in skillDistributionOptions) {
+            val availablePointsByLevel = defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistribution)
+            val skills = characterGenerator.generateSkills(availablePointsByLevel, SkillType.MENTAL)
+
+            skills.mental.values.forEach {
+                assertTrue(it in 0..5, lvlMsg(it, 0..5))
+                assertTrue(skills.physical.values.all { mental -> mental <= it }, skills.toString())
+                assertTrue(skills.social.values.all { social -> social <= it }, skills.toString())
+            }
+
+            val availableSkillPointSum = availablePointsByLevel.map { it.key * it.value }.sum()
+            assertSkillSumEqualsAvailablePointsSum(skills, availableSkillPointSum)
         }
     }
 
@@ -131,6 +177,18 @@ internal class CharacterGeneratorTest {
 
         val attributeSum = physicalSum + socialSum + mentalSum
         assertEquals(availableAtrributePointSum, attributeSum)
+    }
+
+    private fun assertSkillSumEqualsAvailablePointsSum(
+        skills: Skills,
+        availableSkillPointSum: Int
+    ) {
+        val physicalSum = skills.physical.values.sum()
+        val socialSum = skills.social.values.sum()
+        val mentalSum = skills.mental.values.sum()
+
+        val attributeSum = physicalSum + socialSum + mentalSum
+        assertEquals(availableSkillPointSum, attributeSum)
     }
 
     private fun lvlMsg(level: Int, range: IntRange) = "Level is not within $range, but is $level"

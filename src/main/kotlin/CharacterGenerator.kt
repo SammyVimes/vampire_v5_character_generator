@@ -44,7 +44,7 @@ class CharacterGenerator {
         )
     }
 
-    fun generateName(
+    private fun generateName(
         gender: String = listOf("maleFirstNames", "femaleFirstNames").random(),
         country: String = validNameCountries.random()
     ): Pair<String, String> {
@@ -65,12 +65,13 @@ class CharacterGenerator {
         return Attributes(physical, social, mental)
     }
 
-    fun generateSkills(pointsByLevel: PointsByLevel): Skills {
+    fun generateSkills(pointsByLevel: PointsByLevel, priority: SkillType? = null): Skills {
         val pointList = pointsByLevelToPointList(pointsByLevel).fillWith(0, totalSkillCount).shuffled()
+        val sortedPointList = sortSkillsPointList(pointList, priority)
 
-        val physical = physicalSkillsFromList(pointList.subList(0, 9))
-        val social = socialSkillsFromList(pointList.subList(9, 18))
-        val mental = mentalSkillsFromList(pointList.subList(18, 27))
+        val physical = physicalSkillsFromList(sortedPointList.subList(0, 9))
+        val social = socialSkillsFromList(sortedPointList.subList(9, 18))
+        val mental = mentalSkillsFromList(sortedPointList.subList(18, 27))
 
         return Skills(physical, social, mental)
     }
@@ -102,8 +103,21 @@ class CharacterGenerator {
         return when (priority) {
             null -> pointList
             AttributeType.PHYSICAL -> prioritized + others
-            AttributeType.SOCIAL -> others.subList(0, 3) + prioritized + others.subList(6, 9)
+            AttributeType.SOCIAL -> others.subList(0, 3) + prioritized + others.subList(3, 6)
             AttributeType.MENTAL -> others + prioritized
+        }
+    }
+
+    private fun sortSkillsPointList(pointList: List<Int>, priority: SkillType?): List<Int> {
+        val sortedList = pointList.sortedDescending()
+        val prioritized = sortedList.subList(0, 9)
+        val others = sortedList.subList(9, 27).shuffled()
+
+        return when (priority) {
+            null -> pointList
+            SkillType.PHYSICAL -> prioritized + others
+            SkillType.SOCIAL -> others.subList(0, 9) + prioritized + others.subList(9, 18)
+            SkillType.MENTAL -> others + prioritized
         }
     }
 }
