@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import stats.AttributeType
-import stats.Discipline
-import stats.DisciplinePower
-import stats.skillDistributionOptions
+import stats.*
 
 internal class CharacterGeneratorTest {
     private lateinit var characterGenerator: CharacterGenerator
@@ -34,20 +31,46 @@ internal class CharacterGeneratorTest {
         attributes.social.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
         attributes.mental.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
 
-        val physicalSum = attributes.physical.values.sum()
-        val socialSum = attributes.social.values.sum()
-        val mentalSum = attributes.mental.values.sum()
-
-        val attributeSum = physicalSum + socialSum + mentalSum
-        val availableAtrributePointSum = defaultPointsToSpend.attributes.map { it.key * it.value }.sum()
-        assertEquals(availableAtrributePointSum, attributeSum)
+        assertAttributeSumEqualsAvailablePointsSum(attributes)
     }
 
     @Test
     fun testGeneratePhysicalPrioritizedAttributes() {
         val attributes = characterGenerator.generateAttributes(defaultPointsToSpend.attributes, AttributeType.PHYSICAL)
 
-        assertTrue(attributes.physical.values.all { it in 1..5 })
+        attributes.physical.values.forEach {
+            assertTrue(it in 0..5, lvlMsg(it, 0..5))
+            assertTrue(attributes.mental.values.all { mental -> mental <= it }, attributes.toString())
+            assertTrue(attributes.social.values.all { social -> social <= it }, attributes.toString())
+        }
+
+        assertAttributeSumEqualsAvailablePointsSum(attributes)
+    }
+
+    @Test
+    fun testGenerateSocialPrioritizedAttributes() {
+        val attributes = characterGenerator.generateAttributes(defaultPointsToSpend.attributes, AttributeType.SOCIAL)
+
+        attributes.social.values.forEach {
+            assertTrue(it in 0..5, lvlMsg(it, 0..5))
+            assertTrue(attributes.physical.values.all { physical -> physical <= it }, attributes.toString())
+            assertTrue(attributes.mental.values.all { mental -> mental <= it }, attributes.toString())
+        }
+
+        assertAttributeSumEqualsAvailablePointsSum(attributes)
+    }
+
+    @Test
+    fun testGenerateMentallPrioritizedAttributes() {
+        val attributes = characterGenerator.generateAttributes(defaultPointsToSpend.attributes, AttributeType.MENTAL)
+
+        attributes.mental.values.forEach {
+            assertTrue(it in 0..5, lvlMsg(it, 0..5))
+            assertTrue(attributes.physical.values.all { mental -> mental <= it }, attributes.toString())
+            assertTrue(attributes.social.values.all { social -> social <= it }, attributes.toString())
+        }
+
+        assertAttributeSumEqualsAvailablePointsSum(attributes)
     }
 
     @Test
@@ -96,6 +119,18 @@ internal class CharacterGeneratorTest {
                 )
             }
         }
+    }
+
+    private fun assertAttributeSumEqualsAvailablePointsSum(
+        attributes: Attributes,
+        availableAtrributePointSum: Int = defaultPointsToSpend.attributes.map { it.key * it.value }.sum()
+    ) {
+        val physicalSum = attributes.physical.values.sum()
+        val socialSum = attributes.social.values.sum()
+        val mentalSum = attributes.mental.values.sum()
+
+        val attributeSum = physicalSum + socialSum + mentalSum
+        assertEquals(availableAtrributePointSum, attributeSum)
     }
 
     private fun lvlMsg(level: Int, range: IntRange) = "Level is not within $range, but is $level"
