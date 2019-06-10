@@ -7,6 +7,9 @@ import stats.Skills
 
 @Serializable
 data class Character(
+    val firstName: String,
+    val lastName: String,
+
     val attributes: Attributes,
     val skills: Skills,
     val disciplines: List<Discipline>,

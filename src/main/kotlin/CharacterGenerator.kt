@@ -30,6 +30,8 @@ class CharacterGenerator {
             attributes.social.getValue(SocialAttribute.COMPOSURE) + attributes.mental.getValue(MentalAttribute.RESOLVE)
 
         return Character(
+            firstName,
+            lastName,
             attributes,
             skills,
             disciplines,
@@ -42,12 +44,12 @@ class CharacterGenerator {
         )
     }
 
-    fun generateName(): Pair<String, String> {
-        val gender = listOf("male", "female").random()
-        val country = validNameCountries.random()
-
-        val firstName = names.getValue(country).getByGender(gender).random()
-        val lastName = names.getValue(country).surnames.random()
+    fun generateName(
+        gender: String = listOf("maleFirstNames", "femaleFirstNames").random(),
+        country: String = validNameCountries.random()
+    ): Pair<String, String> {
+        val firstName = names.getValue(country).getFirstNameByGender(gender).random()
+        val lastName = names.getValue(country).getSurnameByGender(gender).random()
 
         return Pair(firstName, lastName)
     }

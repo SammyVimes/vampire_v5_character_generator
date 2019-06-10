@@ -3,14 +3,23 @@ package configs
 import com.fasterxml.jackson.module.kotlin.readValue
 
 data class Names(
-    val male: List<String>,
-    val female: List<String>,
-    val surnames: List<String>
+    val maleFirstNames: List<String>,
+    val femaleFirstNames: List<String>,
+    val maleSurnames: List<String>,
+    val femaleSurnames: List<String>
 ) {
-    fun getByGender(gender: String): List<String> {
+    fun getFirstNameByGender(gender: String): List<String> {
         return when (gender) {
-            "male" -> male
-            "female" -> female
+            "maleFirstNames" -> maleFirstNames
+            "femaleFirstNames" -> femaleFirstNames
+            else -> listOf("")
+        }
+    }
+
+    fun getSurnameByGender(gender: String): List<String> {
+        return when (gender) {
+            "maleFirstNames" -> maleSurnames
+            "femaleFirstNames" -> femaleSurnames
             else -> listOf("")
         }
     }
