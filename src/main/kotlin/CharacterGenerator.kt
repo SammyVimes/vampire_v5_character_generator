@@ -79,7 +79,7 @@ class CharacterGenerator {
     fun generateDisciplines(levels: List<Int>): List<Discipline> {
         val pickedDisciplines = mutableListOf<Discipline>()
         for (level in levels) {
-            val pickedFullDiscipline = (fullDisciplines - pickedDisciplines).random()
+            val pickedFullDiscipline = availableDisciplines(fullDisciplines, pickedDisciplines).random()
             val pickedDiscipline = Discipline(
                 pickedFullDiscipline.name,
                 level,
@@ -120,4 +120,7 @@ class CharacterGenerator {
             SkillType.MENTAL -> others + prioritized
         }
     }
+
+    private fun availableDisciplines(fullDisciplines: List<Discipline>, pickedDisciplines: List<Discipline>) =
+        fullDisciplines.filter { it.name !in pickedDisciplines.map { disc -> disc.name } }
 }
