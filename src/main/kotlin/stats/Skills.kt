@@ -1,3 +1,5 @@
+package stats
+
 import kotlinx.serialization.Serializable
 
 @Serializable

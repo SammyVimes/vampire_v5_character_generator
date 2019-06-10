@@ -1,4 +1,5 @@
 import configs.*
+import stats.*
 
 class CharacterGenerator {
     private val defaultPointsToSpend = loadDefaultPointsToSpend()

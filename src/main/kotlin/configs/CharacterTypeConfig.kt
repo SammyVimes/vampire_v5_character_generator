@@ -13,7 +13,7 @@ data class PlayerCharacterType(
 val validPlayerCharacterTypes = listOf("Childer", "Neonate", "Ancilla")
 
 fun loadPlayerCharacterTypes(): Map<String, PlayerCharacterType> {
-    val characterTypeText = PlayerCharacterType::class.java.getResource("../player_character_types.yaml").readText()
+    val characterTypeText = PlayerCharacterType::class.java.getResource("player_character_types.yaml").readText()
     return configMapper.readValue(characterTypeText)
 }
 
@@ -25,6 +25,6 @@ data class MortalCharacterType(
 )
 
 fun loadMortalCharacterTypes(): Map<String, MortalCharacterType> {
-    val characterTypeText = MortalCharacterType::class.java.getResource("../mortal_character_types.yaml").readText()
+    val characterTypeText = MortalCharacterType::class.java.getResource("$configResourcePath/mortal_character_types.yaml").readText()
     return configMapper.readValue(characterTypeText)
 }

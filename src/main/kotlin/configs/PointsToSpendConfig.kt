@@ -12,6 +12,6 @@ data class DefaultPointsToSpend(
 )
 
 fun loadDefaultPointsToSpend(): DefaultPointsToSpend {
-    val defaultPointsText = DefaultPointsToSpend::class.java.getResource("../default_points_to_spend.yaml").readText()
+    val defaultPointsText = DefaultPointsToSpend::class.java.getResource("default_points_to_spend.yaml").readText()
     return configMapper.readValue(defaultPointsText)
 }

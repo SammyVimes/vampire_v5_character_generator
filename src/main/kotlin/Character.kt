@@ -1,7 +1,9 @@
-
-import configs.Discipline
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import stats.Attributes
+import stats.Discipline
+import stats.Skills
 
 @Serializable
 data class Character(
@@ -16,5 +18,6 @@ data class Character(
     var experience: Int,
     var generation: Int
 ) {
+    @UnstableDefault
     fun toJson() = Json.stringify(Character.serializer(), this)
 }

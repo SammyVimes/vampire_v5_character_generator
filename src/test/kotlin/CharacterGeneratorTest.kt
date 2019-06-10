@@ -4,6 +4,7 @@ import configs.loadFullDisciplines
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import stats.skillDistributionOptions
 
 internal class CharacterGeneratorTest {
     private lateinit var characterGenerator: CharacterGenerator
