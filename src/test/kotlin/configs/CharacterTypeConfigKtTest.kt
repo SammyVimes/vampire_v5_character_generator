@@ -1,6 +1,6 @@
 package configs
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class CharacterTypeConfigKtTest {
@@ -8,10 +8,10 @@ internal class CharacterTypeConfigKtTest {
     fun playerCharacterTypesAreSane() {
         fun checkSanity(playerCharacterType: PlayerCharacterType) {
             with(playerCharacterType) {
-                assert(bloodPotency in 0..10)
-                assert(humanity in 1..10)
-                assert(experience >= 0)
-                assert(generations.all { it >= 0 })
+                assertTrue(bloodPotency in 0..10)
+                assertTrue(humanity in 1..10)
+                assertTrue(experience >= 0)
+                assertTrue(generations.all { it >= 0 })
             }
         }
 
@@ -23,14 +23,14 @@ internal class CharacterTypeConfigKtTest {
     fun mortalCharacterTypesAreSane() {
         fun checkSanity(mortalCharacterType: MortalCharacterType) {
             with(mortalCharacterType) {
-                assert(attributes.all { it.key in 1..5 })
+                assertTrue(attributes.all { it.key in 1..5 })
                 assertEquals(9, attributes.map { it.value }.sum())
 
-                assert(skills.all { it.key in 1..5 })
-                assert(skills.map { it.value }.sum() <= 24)
+                assertTrue(skills.all { it.key in 1..5 })
+                assertTrue(skills.map { it.value }.sum() <= 24)
 
-                assert(advantages >= 0)
-                assert(flaws >= 0)
+                assertTrue(advantages >= 0)
+                assertTrue(flaws >= 0)
             }
         }
 

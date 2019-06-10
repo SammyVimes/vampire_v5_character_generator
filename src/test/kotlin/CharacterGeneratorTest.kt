@@ -2,8 +2,12 @@ import configs.DefaultPointsToSpend
 import configs.loadDefaultPointsToSpend
 import configs.loadFullDisciplines
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import stats.AttributeType
+import stats.Discipline
+import stats.DisciplinePower
 import stats.skillDistributionOptions
 
 internal class CharacterGeneratorTest {
@@ -26,9 +30,9 @@ internal class CharacterGeneratorTest {
     fun testGenerateAttributes() {
         val attributes = characterGenerator.generateAttributes(defaultPointsToSpend.attributes)
 
-        assert(attributes.physical.values.all { it in 1..5 })
-        assert(attributes.social.values.all { it in 1..5 })
-        assert(attributes.mental.values.all { it in 1..5 })
+        attributes.physical.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
+        attributes.social.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
+        attributes.mental.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
 
         val physicalSum = attributes.physical.values.sum()
         val socialSum = attributes.social.values.sum()
@@ -40,14 +44,21 @@ internal class CharacterGeneratorTest {
     }
 
     @Test
+    fun testGeneratePhysicalPrioritizedAttributes() {
+        val attributes = characterGenerator.generateAttributes(defaultPointsToSpend.attributes, AttributeType.PHYSICAL)
+
+        assertTrue(attributes.physical.values.all { it in 1..5 })
+    }
+
+    @Test
     fun testGenerateSkills() {
         for (skillDistribution in skillDistributionOptions) {
             val availablePointsByLevel = defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistribution)
             val skills = characterGenerator.generateSkills(availablePointsByLevel)
 
-            assert(skills.physical.values.all { it in 0..5 })
-            assert(skills.social.values.all { it in 0..5 })
-            assert(skills.mental.values.all { it in 0..5 })
+            skills.physical.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
+            skills.social.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
+            skills.mental.values.forEach { assertTrue(it in 0..5, lvlMsg(it, 0..5)) }
 
             val physicalSum = skills.physical.values.sum()
             val socialSum = skills.social.values.sum()
@@ -64,16 +75,37 @@ internal class CharacterGeneratorTest {
         val fullDisciplines = loadFullDisciplines()
         val disciplines = characterGenerator.generateDisciplines(defaultPointsToSpend.disciplineLevels)
 
-        assert(disciplines.all { it.name in fullDisciplines.map { fullDiscipline -> fullDiscipline.name } })
-        assert(disciplines.all { it.level in 1..5 })
+        assertTrue(disciplines.all { it.name in fullDisciplines.map { fullDiscipline -> fullDiscipline.name } })
+        disciplines.forEach { assertTrue(it.level in 1..5, discLvlMsg(it, 1..5)) }
+
         disciplines.forEach {
-            assertEquals(it.level, it.powersByLevel.values.flatten().size) }
+            assertEquals(
+                it.level, it.powersByLevel.values.flatten().size,
+                pwrAmtMsg(it)
+            )
+        }
 
         val validDisciplinePowerNames = fullDisciplines.flatMap {
             it.powersByLevel.values.flatten().map { power -> power.name }
         }
-        assert(disciplines.all {
-            it.powersByLevel.values.flatten().all { power -> power.name in validDisciplinePowerNames }
-        })
+        disciplines.forEach {
+            it.powersByLevel.values.flatten().forEach { power ->
+                assertTrue(
+                    power.name in validDisciplinePowerNames,
+                    discNamesMsg(power, validDisciplinePowerNames)
+                )
+            }
+        }
     }
+
+    private fun lvlMsg(level: Int, range: IntRange) = "Level is not within $range, but is $level"
+
+    private fun discLvlMsg(discipline: Discipline, range: IntRange) =
+        "${discipline.name} level is not within $range, but is ${discipline.level}"
+
+    private fun discNamesMsg(power: DisciplinePower, validDisciplinePowerNames: List<String>) =
+        "Power name ($power.name) is not in valid names ($validDisciplinePowerNames)"
+
+    private fun pwrAmtMsg(discipline: Discipline) =
+        "Amount of discipline powers (${discipline.powersByLevel.values.flatten().size}) is not equal to level (${discipline.level})"
 }
