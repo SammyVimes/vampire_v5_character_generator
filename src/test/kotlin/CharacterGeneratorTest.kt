@@ -142,27 +142,33 @@ internal class CharacterGeneratorTest {
     @Test
     fun testGenerateDisciplines() {
         val fullDisciplines = loadFullDisciplines()
-        val disciplines = characterGenerator.generateDisciplines(defaultPointsToSpend.disciplineLevels)
 
-        assertTrue(disciplines.all { it.name in fullDisciplines.map { fullDiscipline -> fullDiscipline.name } })
-        disciplines.forEach { assertTrue(it.level in 1..5, discLvlMsg(it, 1..5)) }
+        (1..20).forEach { _ ->
+            val disciplines = characterGenerator.generateDisciplines(defaultPointsToSpend.disciplineLevels)
 
-        disciplines.forEach {
-            assertEquals(
-                it.level, it.powersByLevel.values.flatten().size,
-                pwrAmtMsg(it)
-            )
-        }
+            assertEquals(disciplines, disciplines.distinctBy { it.name })
 
-        val validDisciplinePowerNames = fullDisciplines.flatMap {
-            it.powersByLevel.values.flatten().map { power -> power.name }
-        }
-        disciplines.forEach {
-            it.powersByLevel.values.flatten().forEach { power ->
-                assertTrue(
-                    power.name in validDisciplinePowerNames,
-                    discNamesMsg(power, validDisciplinePowerNames)
+            disciplines.forEach {
+                assertTrue(it.name in fullDisciplines.map { fullDiscipline -> fullDiscipline.name })
+
+                assertTrue(it.level in 1..5, discLvlMsg(it, 1..5))
+
+                assertEquals(
+                    it.level, it.powersByLevel.values.flatten().size,
+                    pwrAmtMsg(it)
                 )
+            }
+
+            val validDisciplinePowerNames = fullDisciplines.flatMap {
+                it.powersByLevel.values.flatten().map { power -> power.name }
+            }
+            disciplines.forEach {
+                it.powersByLevel.values.flatten().forEach { power ->
+                    assertTrue(
+                        power.name in validDisciplinePowerNames,
+                        discNamesMsg(power, validDisciplinePowerNames)
+                    )
+                }
             }
         }
     }
