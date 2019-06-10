@@ -21,6 +21,12 @@ data class Attributes(
 
 const val totalAttributeCount = 9
 
+enum class AttributeType {
+    PHYSICAL,
+    SOCIAL,
+    MENTAL
+}
+
 enum class PhysicalAttribute {
     STRENGTH,
     DEXTERITY,

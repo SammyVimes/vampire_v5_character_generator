@@ -54,12 +54,13 @@ class CharacterGenerator {
         return Pair(firstName, lastName)
     }
 
-    fun generateAttributes(pointsByLevel: PointsByLevel): Attributes {
+    fun generateAttributes(pointsByLevel: PointsByLevel, priority: AttributeType? = null): Attributes {
         val pointList = pointsByLevelToPointList(pointsByLevel).fillWith(0, totalAttributeCount).shuffled()
+        val sortedPointList = sortAttributesPointList(pointList, priority)
 
-        val physical = physicalAttributesFromList(pointList.subList(0, 3))
-        val social = socialAttributesFromList(pointList.subList(3, 6))
-        val mental = mentalAttributesFromList(pointList.subList(6, 9))
+        val physical = physicalAttributesFromList(sortedPointList.subList(0, 3))
+        val social = socialAttributesFromList(sortedPointList.subList(3, 6))
+        val mental = mentalAttributesFromList(sortedPointList.subList(6, 9))
 
         return Attributes(physical, social, mental)
     }
@@ -90,6 +91,19 @@ class CharacterGenerator {
         return pickedDisciplines
     }
 
-    fun pointsByLevelToPointList(pointsByLevel: PointsByLevel) =
+    private fun pointsByLevelToPointList(pointsByLevel: PointsByLevel) =
         pointsByLevel.flatMap { (points, level) -> (1..level).map { points } }
+
+    private fun sortAttributesPointList(pointList: List<Int>, priority: AttributeType?): List<Int> {
+        val sortedList = pointList.sortedDescending()
+        val prioritized = sortedList.subList(0, 3)
+        val others = sortedList.subList(3, 9).shuffled()
+
+        return when (priority) {
+            null -> pointList
+            AttributeType.PHYSICAL -> prioritized + others
+            AttributeType.SOCIAL -> others.subList(0, 3) + prioritized + others.subList(6, 9)
+            AttributeType.MENTAL -> others + prioritized
+        }
+    }
 }

@@ -22,5 +22,5 @@ data class Character(
     var generation: Int
 ) {
     @UnstableDefault
-    fun toJson() = Json.stringify(Character.serializer(), this)
+    fun toJson() = Json.stringify(serializer(), this)
 }
