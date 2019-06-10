@@ -1,2 +1,11 @@
-rootProject.name = 'de.odinmatthias.vampire_v5_character_generator'
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "kotlinx-serialization") {
+                useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
+            }
+        }
+    }
+}
 
+rootProject.name = 'de.odinmatthias.vampire_v5_character_generator'

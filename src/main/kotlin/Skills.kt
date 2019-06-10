@@ -1,3 +1,6 @@
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Skills(
     val physical: Map<PhysicalSkill, Int>,
     val social: Map<SocialSkill, Int>,

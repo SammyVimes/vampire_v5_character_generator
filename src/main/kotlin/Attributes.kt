@@ -1,3 +1,6 @@
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Attributes(
     val physical: Map<PhysicalAttribute, Int>,
     val social: Map<SocialAttribute, Int>,

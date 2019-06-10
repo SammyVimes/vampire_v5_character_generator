@@ -1,7 +1,11 @@
 package configs
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.serialization.Serializable
 
+// TODO: Why is this in configs and Attributes / Skills isnt?
+
+@Serializable
 data class Discipline(
     val name: String,
     var level: Int,
@@ -25,6 +29,7 @@ enum class DisciplineName {
     THIN_BLOOD_ALCHEMY
 }
 
+@Serializable
 data class DisciplinePower(
     val name: String,
     val dicePool: String,
