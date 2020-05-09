@@ -16,7 +16,7 @@ class CharacterGenerator {
         val disciplines = generateDisciplines(defaultPointsToSpend.disciplineLevels)
     }
 
-    fun generateCharacter(): Character {
+    fun generateCharacter(): VTMCharacter {
         val (firstName, lastName) = generateName()
 
         val attributes = generateAttributes(defaultPointsToSpend.attributes)
@@ -24,12 +24,12 @@ class CharacterGenerator {
             generateSkills(defaultPointsToSpend.skillsByLevelOptions.getValue(skillDistributionOptions.random()))
         val disciplines = generateDisciplines(defaultPointsToSpend.disciplineLevels)
 
-        val health = 3 + attributes.physical.getValue(PhysicalAttribute.STAMINA) // + fortitude discipline bonus
+        val health = 3 + attributes.physical.getValue(Attribute.STAMINA) // + fortitude discipline bonus
         val characterType = playerCharacterTypes.values.random()
         val willpower =
-            attributes.social.getValue(SocialAttribute.COMPOSURE) + attributes.mental.getValue(MentalAttribute.RESOLVE)
+            attributes.social.getValue(Attribute.COMPOSURE) + attributes.mental.getValue(Attribute.RESOLVE)
 
-        return Character(
+        return VTMCharacter(
             firstName,
             lastName,
             attributes,

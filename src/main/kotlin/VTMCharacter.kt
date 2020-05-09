@@ -7,7 +7,7 @@ import stats.Discipline
 import stats.Skills
 
 @Serializable
-data class Character(
+data class VTMCharacter(
     val firstName: String,
     val lastName: String,
 

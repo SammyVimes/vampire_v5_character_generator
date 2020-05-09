@@ -19,6 +19,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0")
 
+    implementation("com.github.librepdf:openpdf:1.3.16")
+
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")

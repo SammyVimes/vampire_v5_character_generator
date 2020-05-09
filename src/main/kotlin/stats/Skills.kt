@@ -1,13 +1,22 @@
 package stats
 
 import kotlinx.serialization.Serializable
+import stats.Skill.*
 
 @Serializable
-data class Skills(
-    val physical: Map<PhysicalSkill, Int>,
-    val social: Map<SocialSkill, Int>,
-    val mental: Map<MentalSkill, Int>
-)
+class Skills(
+    val physical: Map<Skill, Int>,
+    val social: Map<Skill, Int>,
+    val mental: Map<Skill, Int>
+) {
+    fun all(): Map<Skill, Int> {
+        var m = mutableMapOf<Skill, Int>()
+        m.putAll(physical)
+        m.putAll(social)
+        m.putAll(mental)
+        return m
+    }
+}
 
 const val totalSkillCount = 27
 val skillDistributionOptions = listOf("jackOfAllTrades", "balanced", "specialist")
@@ -18,74 +27,111 @@ enum class SkillType {
     MENTAL
 }
 
-enum class PhysicalSkill {
-    ATHLETICS,
-    BRAWL,
-    CRAFT,
-    DRIVE,
-    FIREARMS,
-    MELEE,
-    LARCENY,
-    STEALTH,
-    SURVIVAL
+enum class Skill(val skillType: SkillType) {
+    ATHLETICS(SkillType.PHYSICAL),
+    BRAWL(SkillType.PHYSICAL),
+    CRAFT(SkillType.PHYSICAL),
+    DRIVE(SkillType.PHYSICAL),
+    FIREARMS(SkillType.PHYSICAL),
+    MELEE(SkillType.PHYSICAL),
+    LARCENY(SkillType.PHYSICAL),
+    STEALTH(SkillType.PHYSICAL),
+    SURVIVAL(SkillType.PHYSICAL),
+
+
+    ANIMAL_KEN(SkillType.SOCIAL),
+    ETIQUETTE(SkillType.SOCIAL),
+    INSIGHT(SkillType.SOCIAL),
+    INTIMIDATION(SkillType.SOCIAL),
+    LEADERSHIP(SkillType.SOCIAL),
+    PERFORMANCE(SkillType.SOCIAL),
+    PERSUASION(SkillType.SOCIAL),
+    STREETWISE(SkillType.SOCIAL),
+    SUBTERFUGE(SkillType.SOCIAL),
+
+
+    ACADEMICS(SkillType.MENTAL),
+    AWARENESS(SkillType.MENTAL),
+    FINANCE(SkillType.MENTAL),
+    INVESTIGATION(SkillType.MENTAL),
+    MEDICINE(SkillType.MENTAL),
+    OCCULT(SkillType.MENTAL),
+    POLITICS(SkillType.MENTAL),
+    SCIENCE(SkillType.MENTAL),
+    TECHNOLOGY(SkillType.MENTAL)
 }
 
-fun physicalSkillsFromList(points: List<Int>): Map<PhysicalSkill, Int> = mapOf(
-    PhysicalSkill.ATHLETICS to points[0],
-    PhysicalSkill.BRAWL to points[1],
-    PhysicalSkill.CRAFT to points[2],
-    PhysicalSkill.DRIVE to points[3],
-    PhysicalSkill.FIREARMS to points[4],
-    PhysicalSkill.MELEE to points[5],
-    PhysicalSkill.LARCENY to points[6],
-    PhysicalSkill.STEALTH to points[7],
-    PhysicalSkill.SURVIVAL to points[8]
+val skillsByType = mapOf(
+    SkillType.PHYSICAL to listOf(
+        ATHLETICS,
+        BRAWL,
+        CRAFT,
+        DRIVE,
+        FIREARMS,
+        MELEE,
+        LARCENY,
+        STEALTH,
+        SURVIVAL
+    ),
+
+    SkillType.SOCIAL to listOf(
+        ANIMAL_KEN,
+        ETIQUETTE,
+        INSIGHT,
+        INTIMIDATION,
+        LEADERSHIP,
+        PERFORMANCE,
+        PERSUASION,
+        STREETWISE,
+        SUBTERFUGE
+    ),
+    
+    SkillType.MENTAL to listOf(
+        ACADEMICS,
+        AWARENESS,
+        FINANCE,
+        INVESTIGATION,
+        MEDICINE,
+        OCCULT,
+        POLITICS,
+        SCIENCE,
+        TECHNOLOGY
+    )
 )
 
-enum class SocialSkill {
-    ANIMAL_KEN,
-    ETIQUETTE,
-    INSIGHT,
-    INTIMIDATION,
-    LEADERSHIP,
-    PERFORMANCE,
-    PERSUASION,
-    STREETWISE,
-    SUBTERFUGE
-}
-
-fun socialSkillsFromList(points: List<Int>): Map<SocialSkill, Int> = mapOf(
-    SocialSkill.ANIMAL_KEN to points[0],
-    SocialSkill.ETIQUETTE to points[1],
-    SocialSkill.INSIGHT to points[2],
-    SocialSkill.INTIMIDATION to points[3],
-    SocialSkill.LEADERSHIP to points[4],
-    SocialSkill.PERFORMANCE to points[5],
-    SocialSkill.PERSUASION to points[6],
-    SocialSkill.STREETWISE to points[7],
-    SocialSkill.SUBTERFUGE to points[8]
+fun physicalSkillsFromList(points: List<Int>): Map<Skill, Int> = mapOf(
+    ATHLETICS to points[0],
+    BRAWL to points[1],
+    CRAFT to points[2],
+    DRIVE to points[3],
+    FIREARMS to points[4],
+    MELEE to points[5],
+    LARCENY to points[6],
+    STEALTH to points[7],
+    SURVIVAL to points[8]
 )
 
-enum class MentalSkill {
-    ACADEMICS,
-    AWARENESS,
-    FINANCE,
-    INVESTIGATION,
-    MEDICINE,
-    OCCULT,
-    POLITICS,
-    SCIENCE,
-    TECHNOLOGY
-}
 
-fun mentalSkillsFromList(points: List<Int>): Map<MentalSkill, Int> = mapOf(
-    MentalSkill.ACADEMICS to points[0],
-    MentalSkill.AWARENESS to points[1],
-    MentalSkill.FINANCE to points[2],
-    MentalSkill.INVESTIGATION to points[3],
-    MentalSkill.MEDICINE to points[4],
-    MentalSkill.OCCULT to points[5],
-    MentalSkill.POLITICS to points[6],
-    MentalSkill.SCIENCE to points[7],
-    MentalSkill.TECHNOLOGY to points[8]
+fun socialSkillsFromList(points: List<Int>): Map<Skill, Int> = mapOf(
+    ANIMAL_KEN to points[0],
+    ETIQUETTE to points[1],
+    INSIGHT to points[2],
+    INTIMIDATION to points[3],
+    LEADERSHIP to points[4],
+    PERFORMANCE to points[5],
+    PERSUASION to points[6],
+    STREETWISE to points[7],
+    SUBTERFUGE to points[8]
+)
+
+fun mentalSkillsFromList(points: List<Int>): Map<Skill, Int> = mapOf(
+    ACADEMICS to points[0],
+    AWARENESS to points[1],
+    FINANCE to points[2],
+    INVESTIGATION to points[3],
+    MEDICINE to points[4],
+    OCCULT to points[5],
+    POLITICS to points[6],
+    SCIENCE to points[7],
+    TECHNOLOGY to points[8]
 )
